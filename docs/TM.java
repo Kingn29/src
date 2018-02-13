@@ -1,4 +1,4 @@
-/* Nicholas King, CSC 131-03, Assignment 2
+ /* Nicholas King, CSC 131-03, Assignment 2
  * This program uses command line arguments to log start and stop times of particular task and saves the information in a text file title "tm.txt"
  * List of acceptable command line arguments can be found in TM.md provided
  */
@@ -30,6 +30,10 @@ public class TM
 			break;
 		case "Describe" : cmdDescribe(file, args);
 			break;
+		case "Size" : cmdDescribe(file, args);
+			break;
+		case "size" : cmdDescribe(file,args);
+			break;
 		default : System.out.println("Unreadable Input");
 			break;
 		}		
@@ -46,10 +50,19 @@ public class TM
 	}
 	private static void cmdDescribe(WriteFile file, String[] args) throws IOException {	
 		String[] description = new String[args.length-2];
-		for (int i = 2; i < args.length; i++) {
-			description[i-2] = args[i];
+		if (args[1].equalsIgnoreCase("size")) {
+			for (int i = 2; i < args.length; i++) {
+				description[i-2] = args[i];
+			}
+			saveData(args[1] + " Size:", file, description);
 		}
-		saveData(args[1] + " Description:", file, description);
+		else {
+			for (int i = 2; i < args.length; i++) {
+				description[i-2] = args[i];
+			}
+			saveData(args[1] + " Description:", file, description);
+			
+		}
 	}
 	
 	//Method retrieved 2/1/2018 from https://stackoverflow.com/questions/16169418/write-a-program-find-that-searches-all-files-specified-on-the-command-line-and-p
@@ -83,6 +96,8 @@ public class TM
 		System.out.println("Data has been saved to tm.txt");
 	}
 }
+
+
 class TimeStamp	
 {
 	public static String main() {
