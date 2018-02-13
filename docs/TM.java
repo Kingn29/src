@@ -5,6 +5,7 @@
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class TM
@@ -97,6 +98,24 @@ public class TM
 	}
 }
 
+class TaskDuration{
+	private LocalDateTime start, stop;
+	
+	
+}
+
+class Task{
+	String name;
+	String description;
+	LinkedList<TaskDuration> durations;
+	public static void task(String name, LinkedList<TaskLogEntry>entries) {
+		
+	}
+}
+
+class TaskLogEntry{
+	
+}
 
 class TimeStamp	
 {
