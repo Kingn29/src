@@ -100,7 +100,10 @@ public class TM
 
 class TaskDuration{
 	private LocalDateTime start, stop;
-	
+	public void TaskDuration(LocalDateTime start,LocalDateTime stop) {
+		this.start = start;
+		this.stop = stop;
+	}
 	
 }
 
