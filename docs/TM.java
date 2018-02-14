@@ -42,13 +42,13 @@ public class TM
 	}
 	private static void cmdStart(WriteFile file, String[] args) throws IOException {
 		TimeStamp tm = new TimeStamp();
-		String time = tm.main();
-		saveData(time, file, args);
+		Timestamp time = tm.main();
+		//saveData(time, file, args);
 	}
 	private static void cmdStop(WriteFile file, String[] args) throws IOException {
 		TimeStamp tm = new TimeStamp();
-		String time = tm.main();
-		saveData(time, file, args);
+		Timestamp time = tm.main();
+		//saveData(time, file, args);
 	}
 	private static void cmdDescribe(WriteFile file, String[] args) throws IOException {	
 		String[] description = new String[args.length-2];
@@ -113,7 +113,7 @@ class Task{
 	String description;
 	LinkedList<TaskDuration> durations;
 	public void task(String name, LinkedList<TaskLogEntry>entries) {
-		TimeStamp lastStart = null;
+		Timestamp lastStart = null;
 		this.name = name;
 		LinkedList<TaskDuration> duration = new LinkedList<TaskDuration>();
 		for (TaskLogEntry entry : entries) {
@@ -153,12 +153,12 @@ class TaskLogEntry{
 
 class TimeStamp	
 {
-	public static String main() {
+	public static Timestamp main() {
 		//current date and time retrived using DateFormat and Calendar class
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		DateFormat df = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 		Calendar calobj = Calendar.getInstance();
-		return (df.format(timestamp));
+		return (timestamp);
 	}
 }
 class WriteFile{
