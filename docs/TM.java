@@ -3,6 +3,7 @@
  * List of acceptable command line arguments can be found in TM.md provided
  */
 import java.io.*;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -110,25 +111,37 @@ class TaskDuration{
 class Task{
 	String name;
 	String description;
-	LinkedList<TaskDuration> duration;
+	LinkedList<TaskDuration> durations;
 	public void task(String name, LinkedList<TaskLogEntry>entries) {
+		TimeStamp lastStart = null;
 		this.name = name;
 		LinkedList<TaskDuration> duration = new LinkedList<TaskDuration>();
 		for (TaskLogEntry entry : entries) {
 			if (entry.name.equals(this.name)) {
-				
+				WriteFile file = new WriteFile();
+				switch (entry.command){
+				case "start" : 
+					lastStart = TimeStamp.main();
+				case "stop" :
+					if (lastStart != null)
+						duration = entry.timestamp - lastStart;
+				}
 			}
-		}
 	 	
+		}
+	}
+	public void addDuration(LocalDateTime start, LocalDateTime stop) {
+		
 	}
 }
 
 class TaskLogEntry{
 	LocalDateTime start, stop;
+	Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 	String name;
 	String command;
 	String data;
-	StringTokenizer stock = new StringTokenizer(command, "\t"); {
+	StringTokenizer stock = new StringTokenizer(command, "\n"); {
 		if (stock.countTokens() > 3) 
 			data = stock.nextToken();
 		else
@@ -142,9 +155,10 @@ class TimeStamp
 {
 	public static String main() {
 		//current date and time retrived using DateFormat and Calendar class
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		DateFormat df = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 		Calendar calobj = Calendar.getInstance();
-		return (df.format(calobj.getTime()));
+		return (df.format(timestamp));
 	}
 }
 class WriteFile{
