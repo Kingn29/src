@@ -110,13 +110,30 @@ class TaskDuration{
 class Task{
 	String name;
 	String description;
-	LinkedList<TaskDuration> durations;
-	public static void task(String name, LinkedList<TaskLogEntry>entries) {
-		
+	LinkedList<TaskDuration> duration;
+	public void task(String name, LinkedList<TaskLogEntry>entries) {
+		this.name = name;
+		LinkedList<TaskDuration> duration = new LinkedList<TaskDuration>();
+		for (TaskLogEntry entry : entries) {
+			if (entries.name.equals(this.name))
+		}
+	 	
+break; 
 	}
 }
 
 class TaskLogEntry{
+	LocalDateTime start, stop;
+	String name;
+	String command;
+	String data;
+	StringTokenizer stock = new StringTokenizer(command, "\t"); {
+		if (stock.countTokens() > 3) 
+			data = stock.nextToken();
+		else
+			data = "";
+	}
+	
 	
 }
 
