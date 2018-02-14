@@ -115,10 +115,11 @@ class Task{
 		this.name = name;
 		LinkedList<TaskDuration> duration = new LinkedList<TaskDuration>();
 		for (TaskLogEntry entry : entries) {
-			if (entries.name.equals(this.name))
+			if (entry.name.equals(this.name)) {
+				
+			}
 		}
 	 	
-break; 
 	}
 }
 
