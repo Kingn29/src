@@ -1,6 +1,6 @@
  /* Nicholas King, CSC 131-03, Assignment 2
  * This program uses command line arguments to log start and stop times of particular task and saves the information in a text file title "tm.txt"
- * List of acceptable command line arguments can be found in TM.md provided, additional size function has been aded 2/12/18
+ * List of acceptable command line arguments can be found in TM.md provided, description method has been modiffied to include size command 2/12/18
  */ 
 import java.io.*;
 import java.text.DateFormat;
