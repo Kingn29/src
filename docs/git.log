@@ -1,0 +1,101 @@
+commit ebaf5644dc43258827026dbf9fd3ba71c6a26c72
+Author: king29 <nking5294@gmail.com>
+Date:   Wed Feb 14 17:16:40 2018 -0800
+
+    comments added to heading of code
+
+commit 697c99931af80fe2972c09f04137188e1363f6d1
+Author: king29 <nking5294@gmail.com>
+Date:   Wed Feb 14 17:00:39 2018 -0800
+
+    Tested code with multiple inputs, works as expected
+
+commit 114e42cb5342539db5e11f5e053e6d8c5b3057bd
+Author: king29 <nking5294@gmail.com>
+Date:   Wed Feb 14 16:53:01 2018 -0800
+
+    reverted code to initial commit and added size command functionality
+
+commit ecb96e44ef561cbe793860f34fb85c1bc4f77b37
+Author: king29 <nking5294@gmail.com>
+Date:   Wed Feb 14 14:45:11 2018 -0800
+
+    added diff TimeStamp class, not yet changed data types accordingly
+
+commit 73a9275ab485e584001f25ca80e3cabf2dee1536
+Author: king29 <nking5294@gmail.com>
+Date:   Wed Feb 14 14:09:23 2018 -0800
+
+    Changed timestamp to TimeStamp ql in timestamp class
+
+commit fb51907f9f526687faaaff8b88a3b765c4fadaa4
+Author: king29 <nking5294@gmail.com>
+Date:   Tue Feb 13 17:09:28 2018 -0800
+
+    Changed Timestamp class to work with new Task class
+
+commit 0e6f91554a220bebf6eba9cf589233fc84cffcc8
+Author: king29 <nking5294@gmail.com>
+Date:   Tue Feb 13 16:41:34 2018 -0800
+
+    Fixed errors in Task class
+
+commit 44fe7ab26e85e409ea905f35ca8358143df85063
+Author: king29 <nking5294@gmail.com>
+Date:   Tue Feb 13 16:37:15 2018 -0800
+
+    Created TaskLogEntry class
+
+commit 95febdd8ee01d31f360d1567609ed96a4c44a282
+Author: king29 <nking5294@gmail.com>
+Date:   Tue Feb 13 15:41:14 2018 -0800
+
+    added TaskDuration class
+
+commit 066f59445279b505d3cd4fccd124a5cc687dcc8d
+Author: king29 <nking5294@gmail.com>
+Date:   Tue Feb 13 15:35:58 2018 -0800
+
+    added Task and TaskLogEntry classes
+
+commit 15e2aa0cd9ec207683b77afcddf8f7feb0005dfd
+Author: king29 <nking5294@gmail.com>
+Date:   Tue Feb 13 15:14:38 2018 -0800
+
+    added size command
+
+commit 943ba9fc007dc46dfa28a2230656671d2f4ddd38
+Author: Kingn2994 <35704310+Kingn29@users.noreply.github.com>
+Date:   Sun Feb 11 20:21:31 2018 -0800
+
+    Update README.md
+
+commit a10486861ff3ca1fa8b6504ed59f68ce617f93cc
+Author: Kingn2994 <35704310+Kingn29@users.noreply.github.com>
+Date:   Sun Feb 11 20:21:11 2018 -0800
+
+    Update README.md
+
+commit aa4d6bdfadc8260c31ff7e6b189234bb251fe916
+Author: Kingn2994 <35704310+Kingn29@users.noreply.github.com>
+Date:   Sun Feb 11 20:20:46 2018 -0800
+
+    Create README.md
+
+commit e500234a932aa202e5922c67ad4588aa92b273aa
+Author: Kingn2994 <35704310+Kingn29@users.noreply.github.com>
+Date:   Sun Feb 11 20:01:49 2018 -0800
+
+    Set theme jekyll-theme-merlot
+
+commit d1f481492a87bc60a6fad0039dc88be5d4f06e33
+Author: king29 <nking5294@gmail.com>
+Date:   Sun Feb 11 19:17:41 2018 -0800
+
+    Initial Commit
+
+commit c83e4d4ea8e28fb1451fa53ef9fdad38eeecce90
+Author: king29 <nking5294@gmail.com>
+Date:   Sun Feb 11 18:38:09 2018 -0800
+
+    Initial commit
