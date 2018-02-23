@@ -38,6 +38,8 @@ public class TM
 			break;
 		case "size" : cmdDescribe(file,args);
 			break;
+		case "rename" : rename(file, args);
+			break;
 		default : System.out.println("Unreadable Input");
 			break;
 		}	
@@ -45,7 +47,7 @@ public class TM
 	private static void cmdStart(WriteFile file, String[] args) throws IOException {
 		String ts = LocalDateTime.now().toString();
 		LocalDateTime start = LocalDateTime.parse(ts);
-		//saveData(time, file, args);
+		saveData(ts, file, args);
 	}
 	private static void cmdStop(WriteFile file, String[] args) throws IOException {
 		String ts = LocalDateTime.now().toString();
@@ -103,6 +105,58 @@ public class TM
 		file.closeFile();
 		System.out.println("Data has been saved to tm.txt");
 	}
+	private static void rename(WriteFile file, String args[]) {
+		Scanner sc = new Scanner(System.in);
+		String oldText = "";
+		System.out.print("Task name to be replaced: ");
+		oldText = sc.nextLine();
+		System.out.print("New name for the task: ");
+		String newText = "";
+		newText = sc.nextLine();
+		cmdRename("tm.txt", oldText, newText);
+		
+	}
+	//code adaoted from http://javaconceptoftheday.com/modify-replace-specific-string-in-text-file-in-java/
+	//on 2/22/18
+	static void cmdRename(String filePath, String oldString, String newString)
+    {
+        File fileToBeModified = new File("tm.txt");
+        String oldContent = "";
+        BufferedReader reader = null;
+        FileWriter writer = null;
+        try
+        {
+            reader = new BufferedReader(new FileReader(fileToBeModified));
+            //Reading all the lines of input text file into oldContent
+            String line = reader.readLine();
+            	while (line != null){
+            		oldContent = oldContent + line + System.lineSeparator();
+                    line = reader.readLine();
+                    }
+            //Replacing oldString with newString in the oldContent          
+            String newContent = oldContent.replaceAll(oldString, newString);             
+            //Rewriting the input text file with newContent             
+            writer = new FileWriter(fileToBeModified);             
+            writer.write(newContent);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                //Closing the resources                 
+                reader.close();                 
+                writer.close();
+            } 
+            catch (IOException e) 
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 }
 
 class TaskDuration{
