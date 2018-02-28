@@ -103,7 +103,6 @@ public class TM
 	    in.close();
 		return een;
 	}
-	
 	private static void saveData(String time, WriteFile file, String[] args) throws IOException {
 		file.openFile();
 		file.addText(time, args);
@@ -130,7 +129,7 @@ public class TM
 		
 		
 	}
-	//code adaoted from http://javaconceptoftheday.com/modify-replace-specific-string-in-text-file-in-java/
+	//code adapted from http://javaconceptoftheday.com/modify-replace-specific-string-in-text-file-in-java/
 	//on 2/22/18
 	static void rename(String filePath, String oldString, String newString)
     {
@@ -138,38 +137,76 @@ public class TM
         String oldContent = "";
         BufferedReader reader = null;
         FileWriter writer = null;
-        try
-        {
-            reader = new BufferedReader(new FileReader(fileToBeModified));
-            //Reading all the lines of input text file into oldContent
-            String line = reader.readLine();
-            	while (line != null){
-            		oldContent = oldContent + line + System.lineSeparator();
-                    line = reader.readLine();
-                    }
-            //Replacing oldString with newString in the oldContent          
-            String newContent = oldContent.replaceAll(oldString, newString);             
-            //Rewriting the input text file with newContent             
-            writer = new FileWriter(fileToBeModified);             
-            writer.write(newContent);
+        if (!newString.equals("")) {
+        	 try
+             {
+                 reader = new BufferedReader(new FileReader(fileToBeModified));
+                 //Reading all the lines of input text file into oldContent
+                 String line = reader.readLine();
+                 	while (line != null){
+                 		oldContent = oldContent + line + System.lineSeparator();
+                         line = reader.readLine();
+                         }
+                 //Replacing oldString with newString in the oldContent          
+                 String newContent = oldContent.replaceAll(oldString, newString);             
+                 //Rewriting the input text file with newContent             
+                 writer = new FileWriter(fileToBeModified);             
+                 writer.write(newContent);
+             }
+             catch (IOException e)
+             {
+                 e.printStackTrace();
+             }
+             finally
+             {
+                 try
+                 {
+                     //Closing the resources                 
+                     reader.close();                 
+                     writer.close();
+                 } 
+                 catch (IOException e) 
+                 {
+                     e.printStackTrace();
+                 }
+             }
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
+        else if (newString.equals("")) {
+        	 try
+             {
+                 reader = new BufferedReader(new FileReader(fileToBeModified));
+                 //Reading all the lines of input text file into oldContent
+                 String line = reader.readLine();
+                 	while (line != null){
+                 		oldContent = oldContent + line + System.lineSeparator();
+                         line = reader.readLine();
+                         }
+                 //Replacing oldString with newString in the oldContent       
+                 String newContent = oldContent.replaceAll(oldString, "DELETED TASK");             
+                 //Rewriting the input text file with newContent             
+                 writer = new FileWriter(fileToBeModified);             
+                 writer.write(newContent);
+             }
+             catch (IOException e)
+             {
+                 e.printStackTrace();
+             }
+             finally
+             {
+                 try
+                 {
+                     //Closing the resources                 
+                     reader.close();                 
+                     writer.close();
+                 } 
+                 catch (IOException e) 
+                 {
+                     e.printStackTrace();
+                 }
+             }
+        	 System.out.println("Task has been replaced with \"DELETED TASK\" in tm.txt");
         }
-        finally
-        {
-            try
-            {
-                //Closing the resources                 
-                reader.close();                 
-                writer.close();
-            } 
-            catch (IOException e) 
-            {
-                e.printStackTrace();
-            }
-        }
+       
     }
 }
 
