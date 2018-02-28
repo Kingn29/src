@@ -40,6 +40,12 @@ public class TM
 			break;
 		case "rename" : rename(file, args);
 			break;
+		case "Rename" : rename(file, args);
+			break;
+		case "delete" : rename(file, args);
+			break;
+		case "Delete" : rename(file, args);
+			break;
 		default : System.out.println("Unreadable Input");
 			break;
 		}	
@@ -167,16 +173,16 @@ class TaskDuration{
 	}
 	
 }
-
+ 
 class Task{
 	String name;
 	String description;
 	LinkedList<TaskDuration> durations;
-	java.util.Date startTime;
-	Timestamp stopTime;
+	LocalDateTime startTime;
+	LocalDateTime stopTime;
 	Timestamp timeSpent;
 	public void task(String name, LinkedList<TaskLogEntry>entries) {
-		Timestamp lastStart = null;
+		LocalDateTime lastStart = null;
 		this.name = name;
 		LinkedList<TaskDuration> duration = new LinkedList<TaskDuration>();
 		for (TaskLogEntry entry : entries) {
@@ -189,53 +195,14 @@ class Task{
 					if (lastStart != null)
 						stopTime = TimeStamp.main();
 				}
-					
 				}
-			}
-	 	
+			 }
 		}
-	}
-	public static Timestamp diff (java.util.Date t1, java.util.Date t2)
-	{
-	    // Make sure the result is always > 0
-	    if (t1.compareTo (t2) < 0)
-	    {
-	        java.util.Date tmp = t1;
-	        t1 = t2;
-	        t2 = tmp;
-	    }
-
-	    // Timestamps mix milli and nanoseconds in the API, so we have to separate the two
-	    long diffSeconds = (t1.getTime () / 1000) - (t2.getTime () / 1000);
-	    // For normals dates, we have millisecond precision
-	    int nano1 = ((int) t1.getTime () % 1000) * 1000000;
-	    // If the parameter is a Timestamp, we have additional precision in nanoseconds
-	    if (t1 instanceof Timestamp)
-	        nano1 = ((Timestamp)t1).getNanos ();
-	    int nano2 = ((int) t2.getTime () % 1000) * 1000000;
-	    if (t2 instanceof Timestamp)
-	        nano2 = ((Timestamp)t2).getNanos ();
-
-	    int diffNanos = nano1 - nano2;
-	    if (diffNanos < 0)
-	    {
-	        // Borrow one second
-	        diffSeconds --;
-	        diffNanos += 1000000000;
-	    }
-
-	    // mix nanos and millis again
-	    Timestamp result = new Timestamp ((diffSeconds * 1000) + (diffNanos / 1000000));
-	    // setNanos() with a value of in the millisecond range doesn't affect the value of the time field
-	    // while milliseconds in the time field will modify nanos! Damn, this API is a *mess*
-	    result.setNanos (diffNanos);
-	    return result;
 	}
 }
 
 class TaskLogEntry{
 	LocalDateTime start, stop;
-	Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 	String name;
 	String command;
 	String data;
@@ -245,18 +212,19 @@ class TaskLogEntry{
 		else
 			data = "";
 	}
-	
-	
 }
 
 class TimeStamp	
 {
-	public static Timestamp main() {
+	public static LocalDateTime main() {
 		//current date and time retrived using DateFormat and Calendar class
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		DateFormat df = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 		Calendar calobj = Calendar.getInstance();
-		return (timestamp);
+		
+		String ts = LocalDateTime.now().toString();
+		LocalDateTime time = LocalDateTime.parse(ts);
+		return (time);
 	}
 }
 class WriteFile{
