@@ -113,16 +113,13 @@ public class TM
 		Scanner sc = new Scanner(System.in);
 		String oldText = "";
 		if (args[0].equalsIgnoreCase("rename")) {
-			System.out.print("Task name to be replaced: ");
-			oldText = sc.nextLine();
-			System.out.print("New name for the task: ");
-			String newText = "";
-			newText = sc.nextLine();
+			oldText = args[1];
+			String newText = args[2];;
 			rename("tm.txt", oldText, newText);
+			System.out.println("Task " + oldText + " now appears as " + newText + " in tm.txt");
 		}
 		else if (args[0].equalsIgnoreCase("delete")){
-			System.out.print("type task name to be deleted: ");
-			oldText = sc.nextLine();
+			oldText = args[1];
 			String newText = "";
 			rename("tm.txt", oldText, newText);
 		}
@@ -204,7 +201,7 @@ public class TM
                      e.printStackTrace();
                  }
              }
-        	 System.out.println("Task has been replaced with \"DELETED TASK\" in tm.txt");
+        	 System.out.println("Task has been flagged as \"DELETED TASK\" in tm.txt");
         }
        
     }
