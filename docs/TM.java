@@ -51,9 +51,13 @@ public class TM
 		}	
 	}
 	private static void cmdStart(WriteFile file, String[] args) throws IOException {
-		String ts = LocalDateTime.now().toString();
+		/*String ts = LocalDateTime.now().toString();
 		LocalDateTime start = LocalDateTime.parse(ts);
 		saveData(ts, file, args);
+		*/
+		
+		TaskLogEntry entry = new TaskLogEntry();
+		
 	}
 	private static void cmdStop(WriteFile file, String[] args) throws IOException {
 		String ts = LocalDateTime.now().toString();
@@ -207,6 +211,54 @@ public class TM
     }
 }
 
+class TaskLog{
+	String fileName;
+	TaskLog(String fileName){
+		this.fileName = fileName;
+	}
+	void writeLine(String line) {
+		Formatter form = new Formatter();
+		try {
+			PrintWriter outFile = new PrintWriter(new FileWriter("tm.txt", true));
+			outFile.println(line);
+			outFile.close();
+		}
+		catch(Exception e) {
+			System.out.println("Error with tm.txt file.");
+		}
+	}
+	LinkedList<TaskLogEntry> read() throws IOException{
+		LinkedList<TaskLogEntry> entries = new LinkedList<>();
+		BufferedReader in = new BufferedReader(new FileReader("tm.txt"));
+		String line;
+		while (in.readLine() != null) {
+			line = in.readLine();
+			entries.add(TaskLogEntry(line));
+		}
+        
+
+		return null;
+		
+	}
+	
+}
+
+class TaskLogEntry{
+	void TaskLogEntry(String line) {
+	LocalDateTime timeStamp;
+	String name;
+	String command;
+	String data = "";
+	StringTokenizer stock = new StringTokenizer(line, "\n"); {
+		if (stock.countTokens() > 3) 
+			data = stock.nextToken();
+		else
+			data = "";
+	}
+	}
+}
+
+
 class TaskDuration{
 	private LocalDateTime start, stop;
 	public void TaskDuration(LocalDateTime start,LocalDateTime stop) {
@@ -241,23 +293,12 @@ class Task{
 				}
 				
 			 }
-			long elapsedSeconds=ChronoUnit.SECONDS.between(lastStart,stopTime);
+			//long elapsedSeconds=ChronoUnit.SECONDS.between(lastStart,stopTime);
 		}
 	}
 }
 
-class TaskLogEntry{
-	LocalDateTime start, stop;
-	String name;
-	String command;
-	String data;
-	StringTokenizer stock = new StringTokenizer(command, "\n"); {
-		if (stock.countTokens() > 3) 
-			data = stock.nextToken();
-		else
-			data = "";
-	}
-}
+
 
 class TimeStamp	
 {
