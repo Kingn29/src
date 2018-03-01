@@ -208,10 +208,11 @@ public class TM
 }
 
 class TaskDuration{
-	private TimeStamp start, stop;
-	public void TaskDuration(TimeStamp start,TimeStamp stop) {
+	private LocalDateTime start, stop;
+	public void TaskDuration(LocalDateTime start,LocalDateTime stop) {
 		this.start = start;
 		this.stop = stop;
+		long elapsedSeconds=ChronoUnit.SECONDS.between(start,stop);
 	}
 	
 }
@@ -238,7 +239,9 @@ class Task{
 						stopTime = TimeStamp.main();
 				}
 				}
+				
 			 }
+			long elapsedSeconds=ChronoUnit.SECONDS.between(lastStart,stopTime);
 		}
 	}
 }
