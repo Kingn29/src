@@ -211,7 +211,7 @@ public class TM
     }
 }
 
-class TaskLog{
+class TaskLog extends TaskLogEntry{
 	String fileName;
 	TaskLog(String fileName){
 		this.fileName = fileName;
@@ -244,18 +244,21 @@ class TaskLog{
 }
 
 class TaskLogEntry{
-	void TaskLogEntry(String line) {
+	TaskLogEntry TaskLogEntry(String line) {
 	LocalDateTime timeStamp;
 	String name;
 	String command;
 	String data = "";
-	StringTokenizer stock = new StringTokenizer(line, "\n"); {
-		if (stock.countTokens() > 3) 
-			data = stock.nextToken();
-		else
-			data = "";
+	StringTokenizer stock = new StringTokenizer(line, "\t");
+	timeStamp = LocalDateTime.parse(stock.nextToken());
+	name = stock.nextToken();
+	command = stock.nextToken();
+	command = stock.nextToken();
+	if (stock.countTokens() > 3) 
+		data = stock.nextToken();
+	return null;
 	}
-	}
+	
 }
 
 
@@ -264,7 +267,7 @@ class TaskDuration{
 	public void TaskDuration(LocalDateTime start,LocalDateTime stop) {
 		this.start = start;
 		this.stop = stop;
-		long elapsedSeconds=ChronoUnit.SECONDS.between(start,stop);
+		//long elapsedSeconds=ChronoUnit.SECONDS.between(start,stop);
 	}
 	
 }
