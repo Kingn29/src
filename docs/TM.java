@@ -13,8 +13,13 @@ import java.util.*;
 
 public class TM
 {
-	public static void main(String[] args) throws IOException
+	
+	
+	public void main(String[] args) throws IOException
 	{
+		run(args);
+		
+		
 		WriteFile file = new WriteFile();
 		String cmd = args[0];
 		switch (cmd){
@@ -50,6 +55,10 @@ public class TM
 			break;
 		}	
 	}
+	void run(String args[]) {
+		TaskLog log = new TaskLog("TM.java");
+	}
+	
 	private static void cmdStart(WriteFile file, String[] args) throws IOException {
 		/*String ts = LocalDateTime.now().toString();
 		LocalDateTime start = LocalDateTime.parse(ts);
@@ -267,7 +276,7 @@ class TaskDuration{
 	TaskDuration(LocalDateTime start,LocalDateTime stop) {
 		this.start = start;
 		this.stop = stop;
-		//elapsedSeconds = elapsedSeconds(this.start, this.stop);
+		//this.elapsedSeconds = elapsedSeconds(this.start, this.stop);
 	}
 	long elapsedSeconds(LocalDateTime start, LocalDateTime stop) {
 		elapsedSeconds=ChronoUnit.SECONDS.between(start,stop);
@@ -279,26 +288,32 @@ class TaskDuration{
 class Task{
 	String name;
 	String description;
+	long elapsedSeconds;
 	LinkedList<TaskDuration> durations;
 	Task(String name, LinkedList<TaskLogEntry> entries) {
 		LocalDateTime lastStart = null;
 		this.name = name;
 		durations = new LinkedList<TaskDuration>();
-		for (TaskLogEntry entry  : entries) {
-		if (entry.name.equals(this.name)) {
-				WriteFile file = new WriteFile();
-				switch (entry.command){
-				case "start" : 
-					lastStart = TimeStamp.main();
-				case "stop" :{
-					if (lastStart != null)
-						stopTime = TimeStamp.main();
-				}
-				}
-				
-			 }
-			//long elapsedSeconds=ChronoUnit.SECONDS.between(lastStart,stopTime);
+		for (TaskLogEntry entry : entries) {
+			if (entry.name.equals(this.name)) {
+					WriteFile file = new WriteFile();
+					switch (entry.command){
+					case "start" : 
+						lastStart = entry.timeStamp;
+					case "stop" :
+						if (lastStart != null) {
+							addDuration(lastStart, entry.timeStamp);
+							lastStart = null;
+						}
+					case "describe" :
+						description = entry.data;
+						break;					
+					}	
+			}
 		}
+	}
+	void addDuration(LocalDateTime lastStart, LocalDateTime stopTime) {
+		elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, stopTime);
 	}
 }
 
