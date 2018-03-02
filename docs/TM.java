@@ -14,7 +14,6 @@ import java.util.*;
 public class TM
 {
 	
-	
 	public void main(String[] args) throws IOException
 	{
 		run(args);
@@ -55,8 +54,25 @@ public class TM
 			break;
 		}	
 	}
-	void run(String args[]) {
-		TaskLog log = new TaskLog("TM.java");
+	void run(String[] args) throws IOException {
+		LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
+		
+		TaskLog log = new TaskLog("tm.txt");
+		switch(args[1]) {
+		case "start" : log.writeLine(LocalDateTime.now() + args[1]);
+			break;
+		case "stop" :  log.writeLine(LocalDateTime.now() + args[1]);
+			break;
+		case "describe" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "describe" + "\t" + args[2]);
+			break;
+		case "summary" :
+			entries = log.read();
+			if (args.length >1) {
+				
+			}
+	 	 	 
+	 	 
+		}
 	}
 	
 	private static void cmdStart(WriteFile file, String[] args) throws IOException {
