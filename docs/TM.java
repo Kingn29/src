@@ -56,7 +56,7 @@ public class TM
 		saveData(ts, file, args);
 		*/
 		
-		TaskLogEntry entry = new TaskLogEntry();
+		//TaskLogEntry entry = new TaskLogEntry();
 		
 	}
 	private static void cmdStop(WriteFile file, String[] args) throws IOException {
@@ -211,7 +211,7 @@ public class TM
     }
 }
 
-class TaskLog extends TaskLogEntry{
+class TaskLog{
 	String fileName;
 	TaskLog(String fileName){
 		this.fileName = fileName;
@@ -233,7 +233,7 @@ class TaskLog extends TaskLogEntry{
 		String line;
 		while (in.readLine() != null) {
 			line = in.readLine();
-			entries.add(TaskLogEntry(line));
+			entries.add(new TaskLogEntry(line));
 		}
         
 
@@ -244,11 +244,11 @@ class TaskLog extends TaskLogEntry{
 }
 
 class TaskLogEntry{
-	TaskLogEntry TaskLogEntry(String line) {
 	LocalDateTime timeStamp;
 	String name;
-	String command;
+	String command; 
 	String data = "";
+	TaskLogEntry(String line) {
 	StringTokenizer stock = new StringTokenizer(line, "\t");
 	timeStamp = LocalDateTime.parse(stock.nextToken());
 	name = stock.nextToken();
@@ -256,7 +256,6 @@ class TaskLogEntry{
 	command = stock.nextToken();
 	if (stock.countTokens() > 3) 
 		data = stock.nextToken();
-	return null;
 	}
 	
 }
@@ -264,10 +263,15 @@ class TaskLogEntry{
 
 class TaskDuration{
 	private LocalDateTime start, stop;
-	public void TaskDuration(LocalDateTime start,LocalDateTime stop) {
+	long elapsedSeconds;
+	TaskDuration(LocalDateTime start,LocalDateTime stop) {
 		this.start = start;
 		this.stop = stop;
-		//long elapsedSeconds=ChronoUnit.SECONDS.between(start,stop);
+		//elapsedSeconds = elapsedSeconds(this.start, this.stop);
+	}
+	long elapsedSeconds(LocalDateTime start, LocalDateTime stop) {
+		elapsedSeconds=ChronoUnit.SECONDS.between(start,stop);
+		return elapsedSeconds;
 	}
 	
 }
@@ -276,15 +280,12 @@ class Task{
 	String name;
 	String description;
 	LinkedList<TaskDuration> durations;
-	LocalDateTime startTime;
-	LocalDateTime stopTime;
-	Timestamp timeSpent;
-	public void task(String name, LinkedList<TaskLogEntry>entries) {
+	Task(String name, LinkedList<TaskLogEntry> entries) {
 		LocalDateTime lastStart = null;
 		this.name = name;
-		LinkedList<TaskDuration> duration = new LinkedList<TaskDuration>();
-		for (TaskLogEntry entry : entries) {
-			if (entry.name.equals(this.name)) {
+		durations = new LinkedList<TaskDuration>();
+		for (TaskLogEntry entry  : entries) {
+		if (entry.name.equals(this.name)) {
 				WriteFile file = new WriteFile();
 				switch (entry.command){
 				case "start" : 
