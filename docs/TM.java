@@ -58,10 +58,11 @@ public class TM
 	static void run(String[] args) throws IOException {
 		TaskLog log = new TaskLog("tm.txt");
 		LinkedList<TaskLogEntry> entries;
+		Task newTask = new Task(args[2], entries);
 		switch(args[0]) {
-		case "start" : log.writeLine(LocalDateTime.now() + args[1]);
+		case "start" : log.writeLine(LocalDateTime.now() + " " + args[1] + " ");
 			break;
-		case "stop" :  log.writeLine(LocalDateTime.now() + args[1]);
+		case "stop" :  log.writeLine(LocalDateTime.now() + " " + args[1] + " ");
 			break;
 		case "describe" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "describe" + "\t" + args[2]);
 			break;
@@ -69,7 +70,7 @@ public class TM
 			entries = log.read();
 			if (args.length >1) {
 				Task task = new Task(args[1], entries);
-				System.out.print(task);
+				System.out.print(task.print());
 			}
 			else if (args.length == 1)
 			{
@@ -347,7 +348,6 @@ class Task{
 		durations = new LinkedList<TaskDuration>();
 		for (TaskLogEntry entry : entries) {
 			if (entry.name.equals(this.name)) {
-					WriteFile file = new WriteFile();
 					switch (entry.command){
 					case "start" : 
 						lastStart = entry.timeStamp;
@@ -357,18 +357,20 @@ class Task{
 							lastStart = null;
 						}
 					case "describe" :
-						description = entry.data;
+						this.description = entry.data;
 						break;					
 					}	
 			}
 		}
+		
+		
 	}
 	long addDuration(LocalDateTime lastStart, LocalDateTime stopTime) {
 		elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, stopTime);
 		return elapsedSeconds;
 	}
 	
-	public String toString() {
+	public String print() {
 		String s = "";
 		s = s + "Summary for task	: " + name + "\n";
 		s = s + "Description 		: " + description + "\n";
