@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class TM
 {
@@ -18,7 +19,7 @@ public class TM
 	{
 		run(args);
 		
-		
+		/*
 		WriteFile file = new WriteFile();
 		String cmd = args[0];
 		switch (cmd){
@@ -52,12 +53,11 @@ public class TM
 			break;
 		default : System.out.println("Unreadable Input");
 			break;
-		}	
+		}	*/
 	}
 	void run(String[] args) throws IOException {
-		LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
-		
 		TaskLog log = new TaskLog("tm.txt");
+		LinkedList<TaskLogEntry> entries;
 		switch(args[1]) {
 		case "start" : log.writeLine(LocalDateTime.now() + args[1]);
 			break;
@@ -68,11 +68,36 @@ public class TM
 		case "summary" :
 			entries = log.read();
 			if (args.length >1) {
-				
+				Task newEntry = new Task(args[1], entries);
+				//print to file
+			}
+			else
+			{
+				System.out.println(summary(entries));
 			}
 	 	 	 
 	 	 
 		}
+	}
+	
+	StringBuilder summary(LinkedList<TaskLogEntry> entries) {
+		TreeSet<String> taskNames = new TreeSet<String>();	
+		long totalSecondsForAllTasks = 0;
+		long totalSecondsOnTask = 0;
+		StringBuilder summaryText = null;
+		for (TaskLogEntry entry : entries) {
+			taskNames.add(entry.name);
+		}
+		for (String taskName : taskNames) {
+			Task task = new Task(taskName, entries);
+			totalSecondsForAllTasks += task.elapsedSeconds;
+			summaryText.append(task + "\n");
+		}
+		
+		summaryText.append("Total time spent on all tasks = " + "");
+		
+		return summaryText;
+		
 	}
 	
 	private static void cmdStart(WriteFile file, String[] args) throws IOException {
@@ -159,7 +184,7 @@ public class TM
 	//on 2/22/18
 	static void rename(String filePath, String oldString, String newString)
     {
-        File fileToBeModified = new File("tm.txt");
+        File fileToBeModified = new File("StringBuilder summery(LinkedList<TaskLogEntry> entries);tm.txt");
         String oldContent = "";
         BufferedReader reader = null;
         FileWriter writer = null;
@@ -235,6 +260,7 @@ public class TM
        
     }
 }
+
 
 class TaskLog{
 	String fileName;
@@ -318,7 +344,7 @@ class Task{
 						lastStart = entry.timeStamp;
 					case "stop" :
 						if (lastStart != null) {
-							addDuration(lastStart, entry.timeStamp);
+							elapsedSeconds = addDuration(lastStart, entry.timeStamp);
 							lastStart = null;
 						}
 					case "describe" :
@@ -328,8 +354,9 @@ class Task{
 			}
 		}
 	}
-	void addDuration(LocalDateTime lastStart, LocalDateTime stopTime) {
+	long addDuration(LocalDateTime lastStart, LocalDateTime stopTime) {
 		elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, stopTime);
+		return elapsedSeconds;
 	}
 }
 
