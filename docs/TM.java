@@ -76,16 +76,10 @@ public class TM
 				System.out.println("ALL TASKS");
 				System.out.println(summary(entries));
 			}
-	 	 	 
-	 	 
+	 	 	
 		}
 	}
 	
-	public String toString() {
-		String s = "";
-		
-		return null;
-	}
 	
 	static StringBuilder summary(LinkedList<TaskLogEntry> entries) {
 		TreeSet<String> taskNames = new TreeSet<String>();	
@@ -372,6 +366,14 @@ class Task{
 	long addDuration(LocalDateTime lastStart, LocalDateTime stopTime) {
 		elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, stopTime);
 		return elapsedSeconds;
+	}
+	
+	public String toString() {
+		String s = "";
+		s = s + "Summary for task	: " + name + "\n";
+		s = s + "Description 		: " + description + "\n";
+		s = s + "Total Time on Task : " + elapsedSeconds + "\n";
+		return s;
 	}
 }
 
