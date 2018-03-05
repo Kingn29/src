@@ -80,6 +80,15 @@ public class TM
 		}
 	}
 	
+	static String toHoursMinutesSeconds(long totalSeconds) {
+		DateFormat df = new SimpleDateFormat("HH:mm:ss");
+		long hours = TimeUnit.SECONDS.toHours(totalSeconds);
+		long minutes = TimeUnit.SECONDS.toMinutes(totalSeconds) - (TimeUnit.SECONDS.toHours(totalSeconds) * 60);
+		long seconds = TimeUnit.SECONDS.toSeconds(totalSeconds) - (TimeUnit.SECONDS.toMinutes(totalSeconds) *60);
+		String s = "" + hours + ":" + minutes + ":" + seconds;
+		return s;
+	}
+	
 	StringBuilder summary(LinkedList<TaskLogEntry> entries) {
 		TreeSet<String> taskNames = new TreeSet<String>();	
 		long totalSecondsForAllTasks = 0;
@@ -94,9 +103,11 @@ public class TM
 			summaryText.append(task + "\n");
 		}
 		
-		summaryText.append("Total time spent on all tasks = " + "");
+		summaryText.append("Total time spent on all tasks = " + toHoursMinutesSeconds(totalSecondsForAllTasks));
 		
 		return summaryText;
+		
+		
 		
 	}
 	
@@ -374,6 +385,7 @@ class TimeStamp
 		LocalDateTime time = LocalDateTime.parse(ts);
 		return (time);
 	}
+	
 }
 class WriteFile{
 	private Formatter form = new Formatter();
