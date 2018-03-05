@@ -15,12 +15,12 @@ import java.util.concurrent.TimeUnit;
 public class TM
 {
 	
-	public void main(String[] args) throws IOException
+	public static void main(String[] args) throws IOException
 	{
 		run(args);
 		
-		/*
-		WriteFile file = new WriteFile();
+		
+		/*WriteFile file = new WriteFile();
 		String cmd = args[0];
 		switch (cmd){
 		case "start": cmdStart(file, args);
@@ -55,10 +55,10 @@ public class TM
 			break;
 		}	*/
 	}
-	void run(String[] args) throws IOException {
+	static void run(String[] args) throws IOException {
 		TaskLog log = new TaskLog("tm.txt");
 		LinkedList<TaskLogEntry> entries;
-		switch(args[1]) {
+		switch(args[0]) {
 		case "start" : log.writeLine(LocalDateTime.now() + args[1]);
 			break;
 		case "stop" :  log.writeLine(LocalDateTime.now() + args[1]);
@@ -68,11 +68,12 @@ public class TM
 		case "summary" :
 			entries = log.read();
 			if (args.length >1) {
-				Task newEntry = new Task(args[1], entries);
-				//print to file
+				Task task = new Task(args[1], entries);
+				System.out.print(task);
 			}
-			else
+			else if (args.length == 1)
 			{
+				System.out.println("ALL TASKS");
 				System.out.println(summary(entries));
 			}
 	 	 	 
@@ -80,16 +81,13 @@ public class TM
 		}
 	}
 	
-	static String toHoursMinutesSeconds(long totalSeconds) {
-		DateFormat df = new SimpleDateFormat("HH:mm:ss");
-		long hours = TimeUnit.SECONDS.toHours(totalSeconds);
-		long minutes = TimeUnit.SECONDS.toMinutes(totalSeconds) - (TimeUnit.SECONDS.toHours(totalSeconds) * 60);
-		long seconds = TimeUnit.SECONDS.toSeconds(totalSeconds) - (TimeUnit.SECONDS.toMinutes(totalSeconds) *60);
-		String s = "" + hours + ":" + minutes + ":" + seconds;
-		return s;
+	public String toString() {
+		String s = "";
+		
+		return null;
 	}
 	
-	StringBuilder summary(LinkedList<TaskLogEntry> entries) {
+	static StringBuilder summary(LinkedList<TaskLogEntry> entries) {
 		TreeSet<String> taskNames = new TreeSet<String>();	
 		long totalSecondsForAllTasks = 0;
 		long totalSecondsOnTask = 0;
@@ -102,14 +100,21 @@ public class TM
 			totalSecondsForAllTasks += task.elapsedSeconds;
 			summaryText.append(task + "\n");
 		}
-		
+
 		summaryText.append("Total time spent on all tasks = " + toHoursMinutesSeconds(totalSecondsForAllTasks));
 		
 		return summaryText;
-		
-		
-		
 	}
+	
+	static String toHoursMinutesSeconds(long totalSeconds) {
+		DateFormat df = new SimpleDateFormat("HH:mm:ss");
+		long hours = TimeUnit.SECONDS.toHours(totalSeconds);
+		long minutes = TimeUnit.SECONDS.toMinutes(totalSeconds) - (TimeUnit.SECONDS.toHours(totalSeconds) * 60);
+		long seconds = TimeUnit.SECONDS.toSeconds(totalSeconds) - (TimeUnit.SECONDS.toMinutes(totalSeconds) *60);
+		String s = "" + hours + ":" + minutes + ":" + seconds;
+		return s;
+	}
+	
 	
 	private static void cmdStart(WriteFile file, String[] args) throws IOException {
 		/*String ts = LocalDateTime.now().toString();
@@ -299,7 +304,7 @@ class TaskLog{
 		}
         
 
-		return null;
+		return entries;
 		
 	}
 	
@@ -314,7 +319,6 @@ class TaskLogEntry{
 	StringTokenizer stock = new StringTokenizer(line, "\t");
 	timeStamp = LocalDateTime.parse(stock.nextToken());
 	name = stock.nextToken();
-	command = stock.nextToken();
 	command = stock.nextToken();
 	if (stock.countTokens() > 3) 
 		data = stock.nextToken();
