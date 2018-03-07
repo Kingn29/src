@@ -17,7 +17,26 @@ public class TM
 	
 	public static void main(String[] args) throws IOException
 	{
-		run(args);
+		TaskLog log = new TaskLog("tm.txt");
+		LinkedList<TaskLogEntry> entries;
+		switch(args[0]) {
+		case "start" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "start");
+			break;
+		case "stop" :  log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "stop");
+			break;
+		case "describe" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "describe" + "\t" + args[2]);
+			break;
+		case "summary" :
+			entries = log.read();
+			if (args.length >1) {
+				Task task = new Task(args[1], entries);
+				System.out.print(task.print());
+			}
+			else
+			{
+				System.out.println(summary(entries));
+			}
+		}
 		
 		
 		/*WriteFile file = new WriteFile();
@@ -55,7 +74,7 @@ public class TM
 			break;
 		}	*/
 	}
-	static void run(String[] args) throws IOException {
+	/*static void run(String[] args) throws IOException {
 		TaskLog log = new TaskLog("tm.txt");
 		LinkedList<TaskLogEntry> entries;
 		switch(args[0]) {
@@ -76,7 +95,7 @@ public class TM
 				System.out.println(summary(entries));
 			}
 		}
-	}
+	}*/
 	static StringBuilder summary(LinkedList<TaskLogEntry> entries) {
 		TreeSet<String> taskNames = new TreeSet<String>();	
 		long totalSecondsForAllTasks = 0;
@@ -88,7 +107,7 @@ public class TM
 		for (String taskName : taskNames) {
 			Task task = new Task(taskName, entries);
 			totalSecondsForAllTasks += task.elapsedSeconds;
-			summaryText.append(task + "\n");
+			summaryText.append(task.toString() + "\n");
 		}
 		summaryText.append("Total time spent on all tasks = " + toHoursMinutesSeconds(totalSecondsForAllTasks));
 		
