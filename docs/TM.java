@@ -24,13 +24,13 @@ public class TM
 			break;
 		case "stop" :  log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "stop");
 			break;
-		case "describe" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "describe" + "\t" + args[2]);
+		case "describe" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "describe" + "\t" + args[2]);
 			break;
 		case "summary" :
 			entries = log.read();
 			if (args.length >1) {
 				Task task = new Task(args[1], entries);
-				System.out.print(task.print());
+				System.out.print(task);
 			}
 			else
 			{
@@ -100,14 +100,14 @@ public class TM
 		TreeSet<String> taskNames = new TreeSet<String>();	
 		long totalSecondsForAllTasks = 0;
 		long totalSecondsOnTask = 0;
-		StringBuilder summaryText = null;
+		StringBuilder summaryText = new StringBuilder();
 		for (TaskLogEntry entry : entries) {
 			taskNames.add(entry.name);
 		}
 		for (String taskName : taskNames) {
 			Task task = new Task(taskName, entries);
 			totalSecondsForAllTasks += task.elapsedSeconds;
-			summaryText.append(task.toString() + "\n");
+			summaryText.append(task + "\n");
 		}
 		summaryText.append("Total time spent on all tasks = " + toHoursMinutesSeconds(totalSecondsForAllTasks));
 		
@@ -383,7 +383,7 @@ class Task{
 		return elapsedSeconds;
 	}
 	
-	public String print() {
+	public String toString() {
 		String s = "";
 		s = s + "Summary for task	: " + name + "\n";
 		s = s + "Description 		: " + description + "\n";
