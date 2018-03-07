@@ -21,16 +21,16 @@ public class TM
 		TaskLog log = new TaskLog(fileName);
 		LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
 		switch(args[0]) {
-		case "start" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "start");
+		case "start" : log.writeLine(LocalDateTime.now().toString() + "\t" + args[1] + "\t" + "start");
 			break;
-		case "stop" :  log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "stop");
+		case "stop" :  log.writeLine(LocalDateTime.now().toString() + "\t" + args[1] + "\t" + "stop");
 			break;
 		case "describe" : 
 			String[] taskDescription = Arrays.copyOfRange(args, 2, args.length);
-			log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "describe" + "\t" + args[2]);
+			log.writeLine(LocalDateTime.now().toString() + "\t" + args[1] + "\t" + "describe" + "\t" + args[2]);
 			break;
 		case "summary" :
-			entries = log.read();
+			entries = log.read(entries);
 			if (args.length > 1) {
 				System.out.print(new Task(args[1], entries));
 			}
@@ -105,7 +105,7 @@ public class TM
 		StringBuilder summaryText = new StringBuilder();
 		for (TaskLogEntry entry : entries) {
 			taskNames.add(entry.name);
-		}
+		} 
 		for (String taskName : taskNames) {
 			Task task = new Task(taskName, entries);
 			totalSecondsForAllTasks += task.elapsedSeconds;
@@ -324,15 +324,15 @@ class TaskLog{
 			System.out.println("Error with tm.txt file.");
 		}
 	}*/
-	LinkedList<TaskLogEntry> read() throws IOException{
-		LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
-		BufferedReader lineIn = new BufferedReader(new FileReader(fileName));
+	LinkedList<TaskLogEntry> read(LinkedList<TaskLogEntry> entries) throws IOException{
+		//LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
+		BufferedReader in = new BufferedReader(new FileReader(fileName));
 		//String line;
-		while (lineIn.readLine() != null) {
+		while (in.readLine() != null) {
 			//line = in.readLine();
-			entries.add(new TaskLogEntry(lineIn.readLine()));
+			entries.add(new TaskLogEntry(in.readLine()));
 		}
-		lineIn.close();
+		//in.close();
         
 		
 		return entries;
@@ -364,7 +364,7 @@ class TaskDuration{
 	TaskDuration(LocalDateTime start,LocalDateTime stop) {
 		this.start = start;
 		this.stop = stop;
-		//this.elapsedSeconds = elapsedSeconds(this.start, this.stop);
+		this.elapsedSeconds = elapsedSeconds(this.start, this.stop);
 	}
 	long elapsedSeconds(LocalDateTime start, LocalDateTime stop) {
 		elapsedSeconds=ChronoUnit.SECONDS.between(start,stop);
@@ -390,6 +390,7 @@ class Task{
 					case "stop" :
 						if (lastStart != null) {
 							elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, entry.timeStamp);
+							
 							lastStart = null;
 						}
 					case "describe" :
@@ -397,9 +398,7 @@ class Task{
 						break;					
 					}	
 			}
-		}
-		
-		
+		}	
 	}
 	long addDuration(LocalDateTime lastStart, LocalDateTime stopTime) {
 		elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, stopTime);
