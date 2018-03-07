@@ -24,7 +24,9 @@ public class TM
 			break;
 		case "stop" :  log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "stop");
 			break;
-		case "describe" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "describe" + "\t" + args[2]);
+		case "describe" : 
+			String[] taskDescription = Arrays.copyOfRange(args, 2, args.length-1);
+			log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "describe" + "\t" + taskDescription);
 			break;
 		case "summary" :
 			entries = log.read();
@@ -289,8 +291,13 @@ public class TM
 
 class TaskLog{
 	String fileName;
+	String description;
 	TaskLog(String fileName){
 		this.fileName = fileName;
+	}
+	TaskLog(String fileName, String[] description){
+		this.fileName = fileName;
+		this.description = description.toString();
 	}
 	void writeLine(String line) {
 		try {
@@ -302,13 +309,24 @@ class TaskLog{
 			System.out.println("Error with tm.txt file.");
 		}
 	}
+	void writeLine(String line, String description) {
+		try {
+			PrintWriter outFile = new PrintWriter(new FileWriter("tm.txt", true));
+			outFile.print(line);
+			outFile.println(description);
+			outFile.close();
+		}
+		catch(Exception e) {
+			System.out.println("Error with tm.txt file.");
+		}
+	}
 	LinkedList<TaskLogEntry> read() throws IOException{
 		LinkedList<TaskLogEntry> entries = new LinkedList<>();
-		BufferedReader in = new BufferedReader(new FileReader("tm.txt"));
-		String line;
-		while (in.readLine() != null) {
-			line = in.readLine();
-			entries.add(new TaskLogEntry(line));
+		BufferedReader Linein = new BufferedReader(new FileReader("tm.txt"));
+		//String line;
+		while (Linein.readLine() != null) {
+			//line = in.readLine();
+			entries.add(new TaskLogEntry(Linein.readLine()));
 		}
         
 		
