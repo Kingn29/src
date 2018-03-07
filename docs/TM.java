@@ -17,22 +17,22 @@ public class TM
 	
 	public static void main(String[] args) throws IOException
 	{
-		TaskLog log = new TaskLog("tm.txt");
-		LinkedList<TaskLogEntry> entries;
+		String fileName = "tm.txt";
+		TaskLog log = new TaskLog(fileName);
+		LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
 		switch(args[0]) {
 		case "start" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "start");
 			break;
 		case "stop" :  log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "stop");
 			break;
 		case "describe" : 
-			String[] taskDescription = Arrays.copyOfRange(args, 2, args.length-1);
-			log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "describe" + "\t" + taskDescription);
+			String[] taskDescription = Arrays.copyOfRange(args, 2, args.length);
+			log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "describe" + "\t" + args[2]);
 			break;
 		case "summary" :
 			entries = log.read();
-			if (args.length >1) {
-				Task task = new Task(args[1], entries);
-				System.out.print(task);
+			if (args.length > 1) {
+				System.out.print(new Task(args[1], entries));
 			}
 			else
 			{
@@ -98,10 +98,10 @@ public class TM
 			}
 		}
 	}*/
+
 	static StringBuilder summary(LinkedList<TaskLogEntry> entries) {
 		TreeSet<String> taskNames = new TreeSet<String>();	
 		long totalSecondsForAllTasks = 0;
-		long totalSecondsOnTask = 0;
 		StringBuilder summaryText = new StringBuilder();
 		for (TaskLogEntry entry : entries) {
 			taskNames.add(entry.name);
@@ -115,7 +115,6 @@ public class TM
 		
 		return summaryText;
 	}
-	
 	static String toHoursMinutesSeconds(long totalSeconds) {
 		DateFormat df = new SimpleDateFormat("HH:mm:ss");
 		long hours = TimeUnit.SECONDS.toHours(totalSeconds);
@@ -158,7 +157,7 @@ public class TM
 	}
 	*/
 	//Method retrieved 2/1/2018 from https://stackoverflow.com/questions/16169418/write-a-program-find-that-searches-all-files-specified-on-the-command-line-and-p
-	public static String cmdSummary(String[] args) throws FileNotFoundException {	
+	/*public static String cmdSummary(String[] args) throws FileNotFoundException {	
 		File one = new File("tm.txt");
 		String een = "";
 	    Scanner in = new Scanner(one);
@@ -189,7 +188,8 @@ public class TM
 		file.closeFile();
 		System.out.println("Data has been saved to tm.txt");
 	}
-	
+	*/
+
 	private static void cmdRename(WriteFile file, String args[]) {
 		Scanner sc = new Scanner(System.in);
 		String oldText = "";
@@ -291,17 +291,15 @@ public class TM
 
 class TaskLog{
 	String fileName;
-	String description;
+	
+	//ArrayList<String> list = new ArrayList<String>();
+	//Formatter form = new Formatter();
 	TaskLog(String fileName){
 		this.fileName = fileName;
 	}
-	TaskLog(String fileName, String[] description){
-		this.fileName = fileName;
-		this.description = description.toString();
-	}
 	void writeLine(String line) {
 		try {
-			PrintWriter outFile = new PrintWriter(new FileWriter("tm.txt", true));
+			PrintWriter outFile = new PrintWriter(new FileWriter(fileName, true));
 			outFile.println(line);
 			outFile.close();
 		}
@@ -309,25 +307,32 @@ class TaskLog{
 			System.out.println("Error with tm.txt file.");
 		}
 	}
-	void writeLine(String line, String description) {
+	/*void writeLine(String line, String[] description) {
 		try {
-			PrintWriter outFile = new PrintWriter(new FileWriter("tm.txt", true));
-			outFile.print(line);
-			outFile.println(description);
+			
+			list.add(line);
+			for (int i = 0; i < description.length; i++){
+				list.add(description[i]);
+			}
+			List<String> list = new ArrayList<>(Arrays.asList(description));
+			String formattedString = list.toString().replace(",", "").replace("[", "").replace("]", "").trim();          
+			PrintWriter outFile = new PrintWriter(new FileWriter(fileName, true));
+			outFile.println(form.format("%s \t %s", line, formattedString));
 			outFile.close();
 		}
 		catch(Exception e) {
 			System.out.println("Error with tm.txt file.");
 		}
-	}
+	}*/
 	LinkedList<TaskLogEntry> read() throws IOException{
-		LinkedList<TaskLogEntry> entries = new LinkedList<>();
-		BufferedReader Linein = new BufferedReader(new FileReader("tm.txt"));
+		LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
+		BufferedReader lineIn = new BufferedReader(new FileReader(fileName));
 		//String line;
-		while (Linein.readLine() != null) {
+		while (lineIn.readLine() != null) {
 			//line = in.readLine();
-			entries.add(new TaskLogEntry(Linein.readLine()));
+			entries.add(new TaskLogEntry(lineIn.readLine()));
 		}
+		lineIn.close();
         
 		
 		return entries;
