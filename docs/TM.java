@@ -58,11 +58,10 @@ public class TM
 	static void run(String[] args) throws IOException {
 		TaskLog log = new TaskLog("tm.txt");
 		LinkedList<TaskLogEntry> entries;
-		Task newTask = new Task(args[2], entries);
 		switch(args[0]) {
-		case "start" : log.writeLine(LocalDateTime.now() + " " + args[1] + " ");
+		case "start" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "start");
 			break;
-		case "stop" :  log.writeLine(LocalDateTime.now() + " " + args[1] + " ");
+		case "stop" :  log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "stop");
 			break;
 		case "describe" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "describe" + "\t" + args[2]);
 			break;
@@ -72,16 +71,12 @@ public class TM
 				Task task = new Task(args[1], entries);
 				System.out.print(task.print());
 			}
-			else if (args.length == 1)
+			else
 			{
-				System.out.println("ALL TASKS");
 				System.out.println(summary(entries));
 			}
-	 	 	
 		}
 	}
-	
-	
 	static StringBuilder summary(LinkedList<TaskLogEntry> entries) {
 		TreeSet<String> taskNames = new TreeSet<String>();	
 		long totalSecondsForAllTasks = 0;
@@ -95,7 +90,6 @@ public class TM
 			totalSecondsForAllTasks += task.elapsedSeconds;
 			summaryText.append(task + "\n");
 		}
-
 		summaryText.append("Total time spent on all tasks = " + toHoursMinutesSeconds(totalSecondsForAllTasks));
 		
 		return summaryText;
@@ -111,14 +105,14 @@ public class TM
 	}
 	
 	
-	private static void cmdStart(WriteFile file, String[] args) throws IOException {
+/*	private static void cmdStart(WriteFile file, String[] args) throws IOException {
 		/*String ts = LocalDateTime.now().toString();
 		LocalDateTime start = LocalDateTime.parse(ts);
 		saveData(ts, file, args);
 		*/
 		
 		//TaskLogEntry entry = new TaskLogEntry();
-		
+		/*
 	}
 	private static void cmdStop(WriteFile file, String[] args) throws IOException {
 		String ts = LocalDateTime.now().toString();
@@ -141,7 +135,7 @@ public class TM
 			
 		}
 	}
-	
+	*/
 	//Method retrieved 2/1/2018 from https://stackoverflow.com/questions/16169418/write-a-program-find-that-searches-all-files-specified-on-the-command-line-and-p
 	public static String cmdSummary(String[] args) throws FileNotFoundException {	
 		File one = new File("tm.txt");
@@ -174,6 +168,7 @@ public class TM
 		file.closeFile();
 		System.out.println("Data has been saved to tm.txt");
 	}
+	
 	private static void cmdRename(WriteFile file, String args[]) {
 		Scanner sc = new Scanner(System.in);
 		String oldText = "";
@@ -279,7 +274,6 @@ class TaskLog{
 		this.fileName = fileName;
 	}
 	void writeLine(String line) {
-		Formatter form = new Formatter();
 		try {
 			PrintWriter outFile = new PrintWriter(new FileWriter("tm.txt", true));
 			outFile.println(line);
@@ -298,7 +292,7 @@ class TaskLog{
 			entries.add(new TaskLogEntry(line));
 		}
         
-
+		
 		return entries;
 		
 	}
@@ -353,7 +347,7 @@ class Task{
 						lastStart = entry.timeStamp;
 					case "stop" :
 						if (lastStart != null) {
-							elapsedSeconds = addDuration(lastStart, entry.timeStamp);
+							elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, entry.timeStamp);
 							lastStart = null;
 						}
 					case "describe" :
@@ -374,7 +368,7 @@ class Task{
 		String s = "";
 		s = s + "Summary for task	: " + name + "\n";
 		s = s + "Description 		: " + description + "\n";
-		s = s + "Total Time on Task : " + elapsedSeconds + "\n";
+		s = s + "Total Time on Task \t: " + elapsedSeconds + "\n";
 		return s;
 	}
 }
