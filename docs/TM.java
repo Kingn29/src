@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.time.*;
 
 public class TM
 {
@@ -19,6 +20,7 @@ public class TM
 	{
 		String fileName = "tm.txt";
 		TaskLog log = new TaskLog(fileName);
+		
 		LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
 		switch(args[0]) {
 		case "start" : log.writeLine(LocalDateTime.now().toString() + "\t" + args[1] + "\t" + "start");
@@ -30,7 +32,7 @@ public class TM
 			log.writeLine(LocalDateTime.now().toString() + "\t" + args[1] + "\t" + "describe" + "\t" + args[2]);
 			break;
 		case "summary" :
-			entries = log.read(entries);
+			entries = log.read(); 
 			if (args.length > 1) {
 				System.out.print(new Task(args[1], entries));
 			}
@@ -39,65 +41,8 @@ public class TM
 				System.out.println(summary(entries));
 			}
 		}
-		
-		
-		/*WriteFile file = new WriteFile();
-		String cmd = args[0];
-		switch (cmd){
-		case "start": cmdStart(file, args);
-			break; 
-		case "stop" : cmdStop(file, args);
-			break;
-		case "Start": cmdStart(file, args);
-			break; 
-		case "Stop" : cmdStop(file, args);
-			break;
-		case "Summary" : cmdSummary(args);
-			break;
-		case "summary" : cmdSummary(args);
-			break;
-		case "describe" : cmdDescribe(file, args);
-			break;
-		case "Describe" : cmdDescribe(file, args);
-			break;
-		case "Size" : cmdDescribe(file, args);
-			break;
-		case "size" : cmdDescribe(file,args);
-			break;
-		case "rename" : cmdRename(file, args);
-			break;
-		case "Rename" : cmdRename(file, args);
-			break;
-		case "delete" : cmdRename(file, args);
-			break;
-		case "Delete" : cmdRename(file, args);
-			break;
-		default : System.out.println("Unreadable Input");
-			break;
-		}	*/
 	}
-	/*static void run(String[] args) throws IOException {
-		TaskLog log = new TaskLog("tm.txt");
-		LinkedList<TaskLogEntry> entries;
-		switch(args[0]) {
-		case "start" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "start");
-			break;
-		case "stop" :  log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "stop");
-			break;
-		case "describe" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "describe" + "\t" + args[2]);
-			break;
-		case "summary" :
-			entries = log.read();
-			if (args.length >1) {
-				Task task = new Task(args[1], entries);
-				System.out.print(task.print());
-			}
-			else
-			{
-				System.out.println(summary(entries));
-			}
-		}
-	}*/
+
 
 	static StringBuilder summary(LinkedList<TaskLogEntry> entries) {
 		TreeSet<String> taskNames = new TreeSet<String>();	
@@ -117,10 +62,10 @@ public class TM
 	}
 	static String toHoursMinutesSeconds(long totalSeconds) {
 		DateFormat df = new SimpleDateFormat("HH:mm:ss");
-		long hours = TimeUnit.SECONDS.toHours(totalSeconds);
+		//long hours = TimeUnit.SECONDS.toHours(totalSeconds);
 		long minutes = TimeUnit.SECONDS.toMinutes(totalSeconds) - (TimeUnit.SECONDS.toHours(totalSeconds) * 60);
 		long seconds = TimeUnit.SECONDS.toSeconds(totalSeconds) - (TimeUnit.SECONDS.toMinutes(totalSeconds) *60);
-		String s = "" + hours + ":" + minutes + ":" + seconds;
+		String s = (Long.toString(minutes) + ":" + Long.toString(seconds));
 		return s;
 	}
 	
@@ -324,13 +269,13 @@ class TaskLog{
 			System.out.println("Error with tm.txt file.");
 		}
 	}*/
-	LinkedList<TaskLogEntry> read(LinkedList<TaskLogEntry> entries) throws IOException{
-		//LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
+	LinkedList<TaskLogEntry> read() throws IOException{
+		LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
 		BufferedReader in = new BufferedReader(new FileReader(fileName));
-		//String line;
+		String line = in.readLine();
 		while (in.readLine() != null) {
-			//line = in.readLine();
-			entries.add(new TaskLogEntry(in.readLine()));
+			line = in.readLine();
+			entries.add(new TaskLogEntry(line));
 		}
 		//in.close();
         
@@ -345,13 +290,13 @@ class TaskLogEntry{
 	LocalDateTime timeStamp;
 	String name;
 	String command; 
-	String data = "";
+	String data = "Not entered";
 	TaskLogEntry(String line) {
 	StringTokenizer stock = new StringTokenizer(line, "\t");
 	timeStamp = LocalDateTime.parse(stock.nextToken());
 	name = stock.nextToken();
 	command = stock.nextToken();
-	if (stock.countTokens() > 3) 
+	while (stock.hasMoreTokens()) 
 		data = stock.nextToken();
 	}
 	
@@ -389,26 +334,23 @@ class Task{
 						lastStart = entry.timeStamp;
 					case "stop" :
 						if (lastStart != null) {
-							elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, entry.timeStamp);
-							
-							lastStart = null;
+							addDuration(lastStart, entry.timeStamp);
 						}
 					case "describe" :
-						this.description = entry.data;
+						description = entry.data;
 						break;					
 					}	
 			}
 		}	
 	}
-	long addDuration(LocalDateTime lastStart, LocalDateTime stopTime) {
-		elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, stopTime);
-		return elapsedSeconds;
+	void addDuration(LocalDateTime lastStart, LocalDateTime stopTime) {
+		this.elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, stopTime);
 	}
 	
 	public String toString() {
 		String s = "";
 		s = s + "Summary for task	: " + name + "\n";
-		s = s + "Description 		: " + description + "\n";
+		s = s + "Description 		: " + this.description + "\n";
 		s = s + "Total Time on Task \t: " + elapsedSeconds + "\n";
 		return s;
 	}
