@@ -17,114 +17,8 @@ import javax.sound.sampled.Line;
 
 import java.time.*;
 
-public class TM implements ITMModel{
-	String name = "";
-	String description = "";
-	String size = "";
-	String oldName = "";
-	String newName = "";
-	public boolean startTask(String name) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean stopTask(String name) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean describeTask(String name, String description) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean sizeTask(String name, String size) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean deleteTask(String name) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean renameTask(String oldName, String newName) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public String taskElapsedTime(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String taskSize(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String taskDescription(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String minTimeForSize(String size) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String maxTimeForSize(String size) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String avgTimeForSize(String size) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<String> taskNamesForSize(String size) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String elapsedTimeForAllTasks() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<String> taskNames() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<String> taskSizes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public TM(String name, String description, String size, String oldName, String newName) {
-		this.name = name;
-		this.description = description;
-		this.size = size;
-		this.oldName = oldName;
-		this.newName = newName;
-	}
-	
+public class TM 
+{
 	public static void main(String[] args) throws IOException
 	{
 		String fileName = "tm.txt";
@@ -159,7 +53,20 @@ public class TM implements ITMModel{
 			break;
 		case "delete" : cmdRename(args);
 			break;
+		default : 
+			usage();
+			break;
 		}
+	}
+	private static void usage() {
+		String s = "";
+		s += "To use this program enter one of the following commands with <your input here>\n";
+		s += "start/stop <task name> to start or stop a task\n";
+		s += "describe <task name> <description> <(optional) S/M/L> to add a description to a task\n";
+		s += "size <task name> <S/M/L> to add a size description to a task\n";
+		s += "summary <task> to view information from a particular task\n";
+		s += "summary to view information from all tasks\n";
+		
 	}
 	static StringBuilder summary(LinkedList<TaskLogEntry> entries) {
 		TreeSet<String> taskNames = new TreeSet<String>();	
