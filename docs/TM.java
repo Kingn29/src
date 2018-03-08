@@ -12,6 +12,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import javax.sound.sampled.Line;
+
 import java.time.*;
 
 public class TM
@@ -62,7 +65,6 @@ public class TM
 		return summaryText;
 	}
 	static String toHoursMinutesSeconds(long totalSeconds) {
-		DateFormat df = new SimpleDateFormat("HH:mm:ss");
 		long hours = TimeUnit.SECONDS.toHours(totalSeconds);
 		long minutes = TimeUnit.SECONDS.toMinutes(totalSeconds) - (TimeUnit.SECONDS.toHours(totalSeconds) * 60);
 		long seconds = TimeUnit.SECONDS.toSeconds(totalSeconds) - (TimeUnit.SECONDS.toMinutes(totalSeconds) *60);
@@ -274,9 +276,9 @@ class TaskLog{
 		LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
 		BufferedReader in = new BufferedReader(new FileReader(fileName));
 		String line = in.readLine();
-		while (in.readLine() != null) {
-			line = in.readLine();
+		while (line != null) {
 			entries.add(new TaskLogEntry(line));
+			line = in.readLine();
 		}
 		in.close();
         
@@ -291,13 +293,13 @@ class TaskLogEntry{
 	LocalDateTime timeStamp;
 	String name;
 	String command; 
-	String data = "Not entered";
+	String data;
 	TaskLogEntry(String line) {
 	StringTokenizer stock = new StringTokenizer(line, "\t");
 	timeStamp = LocalDateTime.parse(stock.nextToken());
 	name = stock.nextToken();
 	command = stock.nextToken();
-	if (stock.hasMoreTokens()) 
+	while (stock.hasMoreTokens()) 
 		data = stock.nextToken();
 	}
 }
@@ -332,13 +334,15 @@ class Task{
 					switch (entry.command){
 					case "start" : 
 						lastStart = entry.timeStamp;
+					break;
 					case "stop" :
-						if (lastStart != null) {
+						if (lastStart != null) 
 							addDuration(lastStart, entry.timeStamp);
-						}
+							lastStart = null;
+					break;
 					case "describe" :
 						description = entry.data;
-						break;					
+					break;					
 					}	
 			}
 		}	
