@@ -23,13 +23,13 @@ public class TM
 		
 		LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
 		switch(args[0]) {
-		case "start" : log.writeLine(LocalDateTime.now().toString() + "\t" + args[1] + "\t" + "start");
+		case "start" : log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "start");
 			break;
-		case "stop" :  log.writeLine(LocalDateTime.now().toString() + "\t" + args[1] + "\t" + "stop");
+		case "stop" :  log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "stop");
 			break;
 		case "describe" : 
 			String[] taskDescription = Arrays.copyOfRange(args, 2, args.length);
-			log.writeLine(LocalDateTime.now().toString() + "\t" + args[1] + "\t" + "describe" + "\t" + args[2]);
+			log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "describe" + "\t" + args[2]);
 			break;
 		case "summary" :
 			entries = log.read(); 
@@ -62,10 +62,10 @@ public class TM
 	}
 	static String toHoursMinutesSeconds(long totalSeconds) {
 		DateFormat df = new SimpleDateFormat("HH:mm:ss");
-		//long hours = TimeUnit.SECONDS.toHours(totalSeconds);
+		long hours = TimeUnit.SECONDS.toHours(totalSeconds);
 		long minutes = TimeUnit.SECONDS.toMinutes(totalSeconds) - (TimeUnit.SECONDS.toHours(totalSeconds) * 60);
 		long seconds = TimeUnit.SECONDS.toSeconds(totalSeconds) - (TimeUnit.SECONDS.toMinutes(totalSeconds) *60);
-		String s = (Long.toString(minutes) + ":" + Long.toString(seconds));
+		String s = (Long.toString(hours) + ":" + Long.toString(minutes) + ":" + Long.toString(seconds));
 		return s;
 	}
 	
@@ -277,7 +277,7 @@ class TaskLog{
 			line = in.readLine();
 			entries.add(new TaskLogEntry(line));
 		}
-		//in.close();
+		in.close();
         
 		
 		return entries;
@@ -296,15 +296,14 @@ class TaskLogEntry{
 	timeStamp = LocalDateTime.parse(stock.nextToken());
 	name = stock.nextToken();
 	command = stock.nextToken();
-	while (stock.hasMoreTokens()) 
+	if (stock.hasMoreTokens()) 
 		data = stock.nextToken();
 	}
-	
 }
 
 
 class TaskDuration{
-	private LocalDateTime start, stop;
+	LocalDateTime start, stop;
 	long elapsedSeconds;
 	TaskDuration(LocalDateTime start,LocalDateTime stop) {
 		this.start = start;
@@ -345,6 +344,7 @@ class Task{
 	}
 	void addDuration(LocalDateTime lastStart, LocalDateTime stopTime) {
 		this.elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, stopTime);
+		durations.add(new TaskDuration (lastStart, stopTime));
 	}
 	
 	public String toString() {
