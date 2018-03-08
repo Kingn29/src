@@ -58,18 +58,48 @@ public class TM
 	}
 	static StringBuilder summary(LinkedList<TaskLogEntry> entries) {
 		TreeSet<String> taskNames = new TreeSet<String>();	
+		TreeSet<String> smallTasks = new TreeSet<String>();	
+		TreeSet<String> mediumTasks = new TreeSet<String>();	
+		TreeSet<String> largeTasks = new TreeSet<String>();	
 		long totalSecondsForAllTasks = 0;
+		long totalSecondsOnTask = 0;
+		int sCount = 0, mCount = 0, lCount = 0;
+		long sMin, sMax, sAvg, mMin = 0, mMax, mAvg, lMin, lMax, lAvg;
 		StringBuilder summaryText = new StringBuilder();
 		for (TaskLogEntry entry : entries) {
-			if (!entry.name.equals("DELETED"))
+			if (!entry.name.equals("DELETED")) {
 				taskNames.add(entry.name);
+			}
 		} 
 		for (String taskName : taskNames) {
 			Task task = new Task(taskName, entries);
 			totalSecondsForAllTasks += task.elapsedSeconds;
+			if (task.size.equals("S")) {
+				smallTasks.add(task.name);
+				sCount++;
+			}
+			if (task.size.equals("M")) {
+				mediumTasks.add(task.name);
+				mCount++;
+			}
+			if (task.size.equals("L")) {
+				largeTasks.add(task.name);
+				lCount++;
+			}
 			summaryText.append(task + "\n");
 		}
 		summaryText.append("Total time spent on all tasks = " + toHoursMinutesSeconds(totalSecondsForAllTasks));
+		//totalSecondsOnTask = 0;
+		System.out.println(mCount);
+		if (sCount >= 2) {
+			taskStats(smallTasks, "S", entries);
+		}
+		if (mCount >= 2) {
+			taskStats(mediumTasks, "M", entries);
+		}
+		if (lCount >= 2) {
+			taskStats(largeTasks, "L", entries);
+		}
 		
 		return summaryText;
 	}
@@ -80,7 +110,35 @@ public class TM
 		String s = (Long.toString(hours) + ":" + Long.toString(minutes) + ":" + Long.toString(seconds));
 		return s;
 	}
-	
+
+	static void taskStats(TreeSet<String> tasks, String size, LinkedList<TaskLogEntry> entries){
+		TreeSet<String> taskNames = new TreeSet<String>();
+		long totalTime;
+		long min = 999999999;
+		long max = 0;
+		long avg = 0;
+		Task minTask;
+		Task maxTask;
+		for (TaskLogEntry entry : entries)
+			taskNames.add(entry.name);
+		for (String taskName : tasks) {
+			Task task = new Task(taskName, entries);
+			if (task.elapsedSeconds < min)
+				min = task.elapsedSeconds;
+			if (task.elapsedSeconds > max) 
+				max = task.elapsedSeconds;
+		}
+		avg = (min + max) /2;
+		
+		String s = "";
+		s += "Minimum time on "+size+" task	: " + toHoursMinutesSeconds(min) + "\n";
+		s += "Maximum time on "+size+" task	: " + toHoursMinutesSeconds(max) + "\n";
+		s += "Average time on "+size+" task	: " + toHoursMinutesSeconds(avg) + "\n";
+		s += "\n";
+		
+		System.out.print(s);
+		
+	}
 	private static void cmdRename(String args[]) {
 	Scanner sc = new Scanner(System.in);
 	String oldText = "";
@@ -181,6 +239,31 @@ public class TM
 }
 
 }
+
+
+class TaskStats{
+	TaskStats(TreeSet<String> tasks, LinkedList<TaskLogEntry> entries){
+		TreeSet<String> taskNames = new TreeSet<String>();
+		long totalTime;
+		long min = 999999999;
+		long max = 0;
+		long avg = 0;
+		Task minTask;
+		Task maxTask;
+		for (TaskLogEntry entry : entries)
+			taskNames.add(entry.name);
+		for (String taskName : tasks) {
+			Task task = new Task(taskName, entries);
+			if (task.elapsedSeconds < min)
+				min = task.elapsedSeconds;
+			if (task.elapsedSeconds > max) 
+				max = task.elapsedSeconds;
+		}
+		avg = (min + max) /2;
+	}
+}
+
+
 class TaskLog{
 	String fileName;
 	TaskLog(String fileName){
