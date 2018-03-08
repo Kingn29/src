@@ -33,30 +33,36 @@ public class TM
 			break;
 		case "describe" : 
 			String[] taskDescription = Arrays.copyOfRange(args, 2, args.length);
-			log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "describe" + "\t" + args[2]);
+			if (args[3] == null)
+				log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "describe" + "\t" + args[2]);
+				log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "describe" + "\t" + args[2] + "\t" + args[3]);
 			break;
 		case "size" :
-			log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "size" + "\t" + args[2]);
+			log.writeLine(LocalDateTime.now() + "\t" + args[1] + "\t" + "size" + "\t" + args[2] + "\t");
 			break;
 		case "summary" :
 			entries = log.read(); 
 			if (args.length > 1) {
-				System.out.print(new Task(args[1], entries));
+				Task task = new Task(args[1], entries);
+				System.out.print(task);
 			}
 			else
 			{
 				System.out.println(summary(entries));
 			}
+		case "rename" : cmdRename(args);
+			break;
+		case "delete" : cmdRename(args);
+			break;
 		}
 	}
-
-
 	static StringBuilder summary(LinkedList<TaskLogEntry> entries) {
 		TreeSet<String> taskNames = new TreeSet<String>();	
 		long totalSecondsForAllTasks = 0;
 		StringBuilder summaryText = new StringBuilder();
 		for (TaskLogEntry entry : entries) {
-			taskNames.add(entry.name);
+			if (!entry.name.equals("DELETED"))
+				taskNames.add(entry.name);
 		} 
 		for (String taskName : taskNames) {
 			Task task = new Task(taskName, entries);
@@ -75,16 +81,108 @@ public class TM
 		return s;
 	}
 	
+	private static void cmdRename(String args[]) {
+	Scanner sc = new Scanner(System.in);
+	String oldText = "";
+	if (args[0].equalsIgnoreCase("rename")) {
+		oldText = args[1];
+		String newText = args[2];;
+		rename("tm.txt", oldText, newText);
+		System.out.println("Task " + oldText + " now appears as " + newText + " in tm.txt");
+	}
+	else if (args[0].equalsIgnoreCase("delete")){
+		oldText = args[1];
+		String newText = "";
+		rename("tm.txt", oldText, newText);
+	}
 	
-
+	
+	}
+//code adapted from http://javaconceptoftheday.com/modify-replace-specific-string-in-text-file-in-java/
+//on 2/22/18
+	static void rename(String filePath, String oldString, String newString)
+	{
+	    File fileToBeModified = new File("tm.txt");
+	    String oldContent = "";
+	    BufferedReader reader = null;
+	    FileWriter writer = null;
+	    if (!newString.equals("")) {
+	    	 try
+	         {
+	             reader = new BufferedReader(new FileReader(fileToBeModified));
+	             //Reading all the lines of input text file into oldContent
+	             String line = reader.readLine();
+	             	while (line != null){
+	             		oldContent = oldContent + line + System.lineSeparator();
+	                     line = reader.readLine();
+	                     }
+	             //Replacing oldString with newString in the oldContent          
+	             String newContent = oldContent.replaceAll(oldString, newString);             
+	             //Rewriting the input text file with newContent             
+	             writer = new FileWriter(fileToBeModified);             
+	             writer.write(newContent);
+	         }
+	         catch (IOException e)
+	         {
+	             e.printStackTrace();
+	         }
+	         finally
+	         {
+	             try
+	             {
+	                 //Closing the resources                 
+	                 reader.close();                 
+	                 writer.close();
+	             } 
+	             catch (IOException e) 
+	             {
+	                 e.printStackTrace();
+	             }
+	         }
+	    }
+	    else if (newString.equals("")) {
+	    	 try
+	         {
+	             reader = new BufferedReader(new FileReader(fileToBeModified));
+	             //Reading all the lines of input text file into oldContent
+	             String line = reader.readLine();
+	             	while (line != null){
+	             		oldContent = oldContent + line + System.lineSeparator();
+	                     line = reader.readLine();
+	                     }
+	             //Replacing oldString with newString in the oldContent       
+	             String newContent = oldContent.replaceAll(oldString, "DELETED");             
+	             //Rewriting the input text file with newContent             
+	             writer = new FileWriter(fileToBeModified);             
+	             writer.write(newContent);
+	         }
+	         catch (IOException e)
+	         {
+	             e.printStackTrace();
+	         }
+	         finally
+	         {
+	             try
+	             {
+	                 //Closing the resources                 
+	                 reader.close();                 
+	                 writer.close();
+	             } 
+	             catch (IOException e) 
+	             {
+	                 e.printStackTrace();
+	             }
+	         }
+	    	 System.out.println("Task has been flagged as \"DELETED TASK\" in tm.txt");
+	    }
+	   
+	
+	
 }
 
-
+}
 class TaskLog{
 	String fileName;
-	
-	//ArrayList<String> list = new ArrayList<String>();
-	//Formatter form = new Formatter();
 	TaskLog(String fileName){
 		this.fileName = fileName;
 	}
@@ -115,6 +213,7 @@ class TaskLog{
 			System.out.println("Error with tm.txt file.");
 		}
 	}*/
+	
 	LinkedList<TaskLogEntry> read() throws IOException{
 		LinkedList<TaskLogEntry> entries = new LinkedList<TaskLogEntry>();
 		BufferedReader in = new BufferedReader(new FileReader(fileName));
@@ -142,16 +241,17 @@ class TaskLogEntry{
 	name = stock.nextToken();
 	command = stock.nextToken();
 	while (stock.hasMoreTokens()) { 
-		if (command.equals(size)) {
+		if (command.equals("size")) {
 			size = stock.nextToken();
+			data = "";
 		}
-		else {
+		else if (command.equals("describe")){
 			data = stock.nextToken();
-			if (stock.nextToken() != null)
+			if (stock.hasMoreTokens())
 				size = stock.nextToken();
-		}
+			}
 		
-	}
+		}
 	}
 }
 
@@ -173,7 +273,7 @@ class TaskDuration{
  
 class Task{
 	String name;
-	String description;
+	String description = "";
 	String size = "";
 	long elapsedSeconds;
 	LinkedList<TaskDuration> durations;
@@ -193,7 +293,9 @@ class Task{
 						lastStart = null;
 						break;
 					case "describe" :
-						description = entry.data;
+						if (entry.data != null)
+							description += entry.data + " / ";
+						size = entry.size;
 						break;		
 					case "size" :
 						size = entry.size;
