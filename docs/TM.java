@@ -17,8 +17,113 @@ import javax.sound.sampled.Line;
 
 import java.time.*;
 
-public class TM
-{
+public class TM implements ITMModel{
+	String name = "";
+	String description = "";
+	String size = "";
+	String oldName = "";
+	String newName = "";
+	public boolean startTask(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean stopTask(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean describeTask(String name, String description) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean sizeTask(String name, String size) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteTask(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean renameTask(String oldName, String newName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String taskElapsedTime(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String taskSize(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String taskDescription(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String minTimeForSize(String size) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String maxTimeForSize(String size) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String avgTimeForSize(String size) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<String> taskNamesForSize(String size) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String elapsedTimeForAllTasks() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<String> taskNames() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<String> taskSizes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public TM(String name, String description, String size, String oldName, String newName) {
+		this.name = name;
+		this.description = description;
+		this.size = size;
+		this.oldName = oldName;
+		this.newName = newName;
+	}
 	
 	public static void main(String[] args) throws IOException
 	{
@@ -89,8 +194,6 @@ public class TM
 			summaryText.append(task + "\n");
 		}
 		summaryText.append("Total time spent on all tasks = " + toHoursMinutesSeconds(totalSecondsForAllTasks));
-		//totalSecondsOnTask = 0;
-		System.out.println(mCount);
 		if (sCount >= 2) {
 			taskStats(smallTasks, "S", entries);
 		}
