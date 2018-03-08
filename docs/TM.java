@@ -5,6 +5,7 @@
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.io.*;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -351,12 +352,25 @@ class Task{
 		String s = "";
 		s = s + "Summary for task	: " + name + "\n";
 		s = s + "Description 		: " + this.description + "\n";
-		s = s + "Total Time on Task \t: " + elapsedSeconds + "\n";
+		s = s + "Total Time on Task \t: " + TimeUtil.elapsedTime(elapsedSeconds) + "\n";
 		return s;
 	}
 }
 
-
+class TimeUtil{
+	static long totalSeconds;
+	TimeUtil(long totalSeconds){
+		this.totalSeconds = totalSeconds;
+	}
+	static String elapsedTime(long totalSeconds) {
+		DateFormat df = new SimpleDateFormat("HH:mm:ss");
+		long hours = TimeUnit.SECONDS.toHours(totalSeconds);
+		long minutes = TimeUnit.SECONDS.toMinutes(totalSeconds) - (TimeUnit.SECONDS.toHours(totalSeconds) * 60);
+		long seconds = TimeUnit.SECONDS.toSeconds(totalSeconds) - (TimeUnit.SECONDS.toMinutes(totalSeconds) *60);
+		String s = (Long.toString(hours) + ":" + Long.toString(minutes) + ":" + Long.toString(seconds));
+		return s;
+	}
+}
 
 class TimeStamp	
 {
