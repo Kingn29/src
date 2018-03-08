@@ -281,8 +281,6 @@ class TaskLog{
 			line = in.readLine();
 		}
 		in.close();
-        
-		
 		return entries;
 		
 	}
@@ -348,7 +346,7 @@ class Task{
 		}	
 	}
 	void addDuration(LocalDateTime lastStart, LocalDateTime stopTime) {
-		this.elapsedSeconds=ChronoUnit.SECONDS.between(lastStart, stopTime);
+		this.elapsedSeconds += ChronoUnit.SECONDS.between(lastStart, stopTime);
 		durations.add(new TaskDuration (lastStart, stopTime));
 	}
 	
